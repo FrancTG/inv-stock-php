@@ -1,0 +1,11 @@
+CREATE DATABASE `inv-stock`;
+
+CREATE TABLE users (
+    username VARCHAR(30) PRIMARY KEY,
+    name VARCHAR(30),
+    surnames VARCHAR(50),
+    password CHAR(60) NOT NULL,
+    rol VARCHAR(15) NOT NULL
+);
+
+INSERT INTO users VALUES ('admin', 'name','surnames', );

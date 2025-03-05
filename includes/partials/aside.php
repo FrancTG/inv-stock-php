@@ -7,12 +7,14 @@
     </div>
     <nav>
         <ul>
-            <li><a href="">Home</a></li>
-            <li><a href="">Productos</a></li>
-            <li><a href="">Pedidos</a></li>
-            <li><a href="">Facturas</a></li>
-            <li><a href="">Clientes</a></li>
-            <li><a href="">Proveedores</a></li>
+            <li><a href=""><ion-icon name="home"></ion-icon>Home</a></li>
+            <li><a href=""><ion-icon name="keypad"></ion-icon>Venta</a></li>
+            <li><a href=""><ion-icon name="fast-food"></ion-icon>Productos</a></li>
+            <li><a href=""><ion-icon name="layers"></ion-icon>Pedidos</a></li>
+            <li><a href=""><ion-icon name="document-text"></ion-icon>Albaranes</a></li>
+            <li><a href=""><ion-icon name="document-text"></ion-icon>Facturas</a></li>
+            <li><a href=""><ion-icon name="people"></ion-icon>Clientes</a></li>
+            <li><a href=""><ion-icon name="people"></ion-icon>Proveedores</a></li>
         </ul>
     </nav>
     <div></div>

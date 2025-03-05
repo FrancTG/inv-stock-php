@@ -1,11 +1,120 @@
 CREATE DATABASE `inv-stock`;
 
 CREATE TABLE users (
-    username VARCHAR(30) PRIMARY KEY,
+    id INTEGER PRIMARY KEY AUTO_INCREMENT,
+    username VARCHAR(30) NOT NULL,
     name VARCHAR(30),
     surnames VARCHAR(50),
     password CHAR(60) NOT NULL,
     rol VARCHAR(15) NOT NULL
 );
 
-INSERT INTO users VALUES ('admin', 'name','surnames', );
+CREATE TABLE product (
+    id INTEGER PRIMARY KEY AUTO_INCREMENT,
+    ean BIGINT,
+    name VARCHAR(50),
+    stock INTEGER,
+    weigth FLOAT,
+    volume FLOAT,
+    category VARCHAR(50),
+    iva FLOAT,
+    discount FLOAT,
+    description VARCHAR(200),
+    img_src VARCHAR(200)
+);
+
+CREATE TABLE supplier (
+    id INTEGER PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(50),
+    company VARCHAR(100),
+    address VARCHAR(200),
+    city VARCHAR(100),
+    country VARCHAR(50),
+    phone_number VARCHAR(20),
+    iban VARCHAR(40),
+    img_src VARCHAR(200)
+);
+
+CREATE TABLE client (
+    id INTEGER PRIMARY KEY AUTO_INCREMENT,
+    identification_number VARCHAR(30),
+    name VARCHAR(50),
+    company VARCHAR(100),
+    address VARCHAR(200),
+    city VARCHAR(100),
+    country VARCHAR(50),
+    phone_number VARCHAR(20),
+    img_src VARCHAR(200)
+);
+
+CREATE TABLE orders (
+    id INTEGER PRIMARY KEY AUTO_INCREMENT,
+    id_client INTEGER,
+    date DATE,
+    status VARCHAR(30),
+    FOREIGN KEY (id_client) REFERENCES client(id)
+);
+
+CREATE TABLE order_line (
+    id_order INTEGER,
+    id_product INTEGER,
+    quantity INTEGER,
+    PRIMARY KEY (id_order, id_product),
+    FOREIGN KEY (id_order) REFERENCES orders(id),
+    FOREIGN KEY (id_product) REFERENCES product(id)
+);
+
+CREATE TABLE delivery_note (
+    id INTEGER PRIMARY KEY AUTO_INCREMENT,
+    id_order INTEGER,
+    id_client INTEGER,
+    date DATE,
+    status VARCHAR(30),
+    FOREIGN KEY (id_order) REFERENCES orders(id),
+    FOREIGN KEY (id_client) REFERENCES client(id)
+);
+
+CREATE TABLE delivery_note_line (
+    id_delivery_note INTEGER,
+    id_product INTEGER,
+    descuento FLOAT,
+    quantity INTEGER,
+    PRIMARY KEY (id_delivery_note, id_product),
+    FOREIGN KEY (id_delivery_note) REFERENCES delivery_note(id),
+    FOREIGN KEY (id_product) REFERENCES product(id)
+);
+
+CREATE TABLE invoice (
+    id INTEGER PRIMARY KEY AUTO_INCREMENT,
+    id_client INTEGER,
+    date DATE,
+    description VARCHAR(100),
+    status VARCHAR(30),
+    FOREIGN KEY (id_client) REFERENCES client(id)
+);
+
+CREATE TABLE invoice_line (
+    id_invoice INTEGER,
+    id_product INTEGER,
+    quantity INTEGER NOT NULL,
+    discount FLOAT,
+    PRIMARY KEY (id_invoice, id_product),
+    FOREIGN KEY (id_invoice) REFERENCES invoice(id),
+    FOREIGN KEY (id_product) REFERENCES product(id)
+);
+
+CREATE TABLE purchase (
+    id_product INTEGER,
+    id_supplier INTEGER,
+    PRIMARY KEY (id_product, id_supplier),
+    FOREIGN KEY (id_product) REFERENCES product(id),
+    FOREIGN KEY (id_supplier) REFERENCES supplier(id)
+);
+
+CREATE TABLE cashier_sale (
+    id_user INTEGER,
+    id_products INTEGER,
+    PRIMARY KEY (id_user,id_products),
+    FOREIGN KEY (id_user) REFERENCES users(id),
+    FOREIGN KEY (id_products) REFERENCES product(id)
+);

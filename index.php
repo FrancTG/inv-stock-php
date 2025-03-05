@@ -15,7 +15,7 @@
     </header>
     <main>
         <section>
-            hellow world
+            <?php header("Location: ./includes/login.php"); exit(); ?>
         </section>
     </main>
 </body>

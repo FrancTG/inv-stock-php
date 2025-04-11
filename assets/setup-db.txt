@@ -14,10 +14,11 @@ CREATE TABLE product (
     ean BIGINT,
     name VARCHAR(50),
     stock INTEGER,
-    weigth FLOAT,
+    weight FLOAT,
     volume FLOAT,
     category VARCHAR(50),
     iva FLOAT,
+    price FLOAT,
     discount FLOAT,
     description VARCHAR(200),
     img_src VARCHAR(200)
@@ -51,7 +52,6 @@ CREATE TABLE orders (
     id INTEGER PRIMARY KEY AUTO_INCREMENT,
     id_client INTEGER,
     date DATE,
-    status VARCHAR(30),
     FOREIGN KEY (id_client) REFERENCES client(id)
 );
 
@@ -59,6 +59,7 @@ CREATE TABLE order_line (
     id_order INTEGER,
     id_product INTEGER,
     quantity INTEGER,
+    status VARCHAR(30),
     PRIMARY KEY (id_order, id_product),
     FOREIGN KEY (id_order) REFERENCES orders(id),
     FOREIGN KEY (id_product) REFERENCES product(id)
@@ -77,7 +78,7 @@ CREATE TABLE delivery_note (
 CREATE TABLE delivery_note_line (
     id_delivery_note INTEGER,
     id_product INTEGER,
-    descuento FLOAT,
+    discount FLOAT,
     quantity INTEGER,
     PRIMARY KEY (id_delivery_note, id_product),
     FOREIGN KEY (id_delivery_note) REFERENCES delivery_note(id),

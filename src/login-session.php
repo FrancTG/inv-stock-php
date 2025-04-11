@@ -7,18 +7,21 @@ session_start();
 $uname = $_POST["username"];
 $pwd = $_POST["password"];
 
-$SQL= "SELECT username, password, name, surnames FROM users WHERE username='$uname'";
+$SQL= "SELECT username, password, name, surnames FROM users WHERE username=?";
 
-$res = $mysqli->query($SQL);
+$stmt = $mysqli->prepare($SQL);
+$stmt->bind_param("s",$uname);
+$stmt->execute();
+$res = $stmt->get_result();
 $row = $res->fetch_assoc();
 
 if (password_verify($pwd, $row["password"])) {
     $_SESSION["username"] = $row["username"];
     $_SESSION["nameUser"] = $row["name"]." ". $row["surnames"];
-    header("Location: home.php");
+    header("Location: /inv-stock-php/src/home.php");
     exit();
 } else {
-    header("Location: login.php?info=1");
+    header("Location: /inv-stock-php/src/login.php?info=1");
     exit();
 }
 ?>

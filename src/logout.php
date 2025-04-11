@@ -5,6 +5,6 @@
     session_unset();
     session_destroy();
 
-    header("Location: login.php?info=2");
+    header("Location: /inv-stock-php/src/login.php?info=2");
     exit();
 ?>

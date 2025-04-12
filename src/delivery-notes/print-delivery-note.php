@@ -5,13 +5,12 @@ require "../db.php";
 require "../../assets/fpdf.php";
 require "../settings.php";
 
-$id = $_POST["invoice-id"];
-$date = $_POST["invoice-date"];
-$idClient = $_POST["invoice-client"];
-$desc = $_POST["invoice-desc"];
-$prodIDs = $_POST["invoice-prodid"];
-$discount = $_POST["invoice-discount"];
-$quantity = $_POST["invoice-quantity"];
+$id = $_POST["dnote-id"];
+$date = $_POST["dnote-date"];
+$idClient = $_POST["dnote-client"];
+$prodIDs = $_POST["dnote-prodid"];
+$discount = $_POST["dnote-discount"];
+$quantity = $_POST["dnote-quantity"];
 
 $SQL= "SELECT identification_number,name,company,address,city,country,phone_number FROM client WHERE id = ?";
 
@@ -22,7 +21,7 @@ $res = $stmt->get_result();
 $clientData = $res->fetch_assoc();
 
 
-$SQL= "SELECT product.id,product.name,product.description,product.iva,product.price FROM invoice_line INNER JOIN product ON invoice_line.id_product = product.id WHERE invoice_line.id_invoice = ?";
+$SQL= "SELECT product.id,product.name,product.description,product.iva,product.price FROM delivery_note_line INNER JOIN product ON delivery_note_line.id_product = product.id WHERE delivery_note_line.id_delivery_note = ?";
 
 $stmt = $mysqli->prepare($SQL);
 $stmt->bind_param("i",$id);
@@ -34,9 +33,9 @@ $pdf = new FPDF();
 $pdf->AliasNbPages();
 $pdf->AddPage();
 $pdf->SetFont('Times','',24);
-$pdf->Cell(0,20,'Invoice',0,1);
+$pdf->Cell(0,20,'Delivery Note',0,1);
 $pdf->SetFont('Times','',8);
-$pdf->Cell(0,5,'Invoice ID: '.$id,0,1);
+$pdf->Cell(0,5,'ID: '.$id,0,1);
 $pdf->Cell(0,5,'Date: '.$date,0,1);
 $pdf->Cell(10,5,'',0,1);
 $pdf->SetFont('Times','',12);
@@ -113,13 +112,6 @@ $pdf->Ln();
 
 // Línea de cierre
 $pdf->Cell(array_sum($w),0,'','T');
-$pdf->Ln();
-
-$pdf->Cell(0,10,'',0,1);
-$pdf->SetFont('Times','',12);
-$pdf->Cell(0,10,'Description',0,1);
-$pdf->SetFont('Times','',8);
-$pdf->Cell(0,10,$desc,0,1);
 
 $pdf->Output('I','invoice.pdf',false);
 ?>

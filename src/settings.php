@@ -1,0 +1,9 @@
+<?php
+$COMPANY_NAME = 'Example S.L';
+$COMPANY_ID = '12345678A';
+$COMPANY_ADDRESS = 'Address Street, 112D';
+$COMPANY_CITY = 'Barcelona';
+$COMPANY_COUNTRY = 'Spain';
+$COMPANY_PHONE_NUM = '636515151';
+
+?>

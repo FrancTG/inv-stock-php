@@ -36,6 +36,17 @@
                 <form class="container" action="<?php echo $actionURL; ?>" method="post">
                     <?php if ($editing) {echo "<h1>Client details</h1>";} else {echo "<h1>New client</h1>";} ?>
 
+                    <div class="form-buttons">
+                        <?php 
+                            if ($editing) {
+                                echo "<input type='submit' value='Update' />";
+                                echo "<input type='submit' fromaction='./delete-client.php' value='Delete' />";
+                            } else {
+                                echo "<input type='submit' value='Create' />";
+                            }
+                        ?>
+                    </div>
+
                     <input type="hidden" name="cli-id" value="<?php if (isset($row)) echo $row["id"] ?>">
                     
                     <label for="cli-img">Select image:</label>
@@ -63,14 +74,8 @@
                     <label for="cli-phone-num">Phone Number:</label>
                     <input type="text" name="cli-phone-num" id="cli-phone-num" placeholder="e.g. 636888999" value="<?php if (isset($row)) echo $row["phone_number"] ?>">
 
-                    <?php 
-                        if ($editing) {
-                            echo "<input type='submit' value='Update'></form>";
-                            echo "<form method='post' action='./delete-client.php'><input type='hidden' id='cli-id' name='cli-id' value='".$row["id"]."'><input type='submit' value='Delete'></form>";
-                        } else {
-                            echo "<input type='submit' value='Create'></form>";
-                        }
-                    ?>
+                    
+                </form>
                 
             </div>
         </section>

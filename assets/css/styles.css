@@ -21,6 +21,7 @@ main > section {
     overflow-y: auto;
 }
 input[type=submit] {
+    width: auto;
     background-color: #6076f6;
     margin: 10px 0;
 }
@@ -76,6 +77,11 @@ th {
 td {
     background-color: #969696;
 }
+.form-buttons {
+    display: flex;
+    gap: 10px;
+}
+
 
 /* ASIDE */
 

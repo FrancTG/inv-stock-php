@@ -36,6 +36,17 @@
                 <form class="container" action="<?php echo $actionURL; ?>" method="post">
                     <?php if ($editing) {echo "<h1>Detalles del producto</h1>";} else {echo "<h1>Nuevo producto</h1>";} ?>
 
+                    <div class="form-buttons">
+                        <?php 
+                            if ($editing) {
+                                echo "<input type='submit' value='Update' />";
+                                echo "<input type='submit' formaction='./delete-product.php' value='Delete' />";
+                            } else {
+                                echo "<input type='submit' value='Create'>";
+                            }
+                        ?>
+                    </div>
+
                     <input type="hidden" name="prod-id" value="<?php if (isset($row)) echo $row["id"] ?>">
                     
                     <label for="prod-img">Select image:</label>
@@ -48,6 +59,9 @@
                     <label for="prod-name">Name:</label>
                     <input type="text" name="prod-name" id="prod-name" placeholder="Patatas Fritas, Refresco Cola, ..."  value="<?php if (isset($row)) echo $row["name"] ?>"> 
                 
+                    <label for="prod-description">Description:</label>
+                    <input type="text" name="prod-description" id="prod-description" placeholder="Al punto de sal, Light y sin Cafeina, ..."  value="<?php if (isset($row)) echo $row["description"] ?>">
+
                     <label for="prod-stock">Stock:</label>
                     <input type="number" name="prod-stock" id="prod-stock" placeholder="e.g. 125" min="0"  value="<?php if (isset($row)) echo $row["stock"] ?>">
                 
@@ -68,19 +82,7 @@
                 
                     <label for="prod-discount">Discount:</label>
                     <input type="number" name="prod-discount" id="prod-discount" placeholder="e.g. 12.5 (%)"  step=".01" min="0"  value="<?php if (isset($row)) echo $row["discount"] ?>">
-                
-                    <label for="prod-description">Description:</label>
-                    <input type="text" name="prod-description" id="prod-description" placeholder="Al punto de sal, Light y sin Cafeina, ..."  value="<?php if (isset($row)) echo $row["description"] ?>">
-                
-                    <?php 
-                        if ($editing) {
-                            echo "<input type='submit' value='Update'></form>";
-                            echo "<form method='post' action='./delete-product.php'><input type='hidden' id='prod-id' name='prod-id' value='".$row["id"]."'><input type='submit' value='Delete'></form>";
-                        } else {
-                            echo "<input type='submit' value='Create'></form>";
-                        }
-                    ?>
-                
+                </form>
             </div>
         </section>
     </main>

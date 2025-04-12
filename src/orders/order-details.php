@@ -37,6 +37,20 @@
                 <form class="container" action="<?php echo $actionURL; ?>" method="post">
                     <?php if ($editing) {echo "<h1>Order details</h1>";} else {echo "<h1>New order</h1>";} ?>
 
+                    <div class="form-buttons">
+                        <?php 
+                            if ($editing) {
+                                echo "<input class='update' type='submit' value='Update' />";
+                                echo "<input type='submit' formaction='../delivery-notes/delivery-note-details.php' value='New delivery note from order' />";
+                                echo "<input type='submit' fromaction='./delete-order.php' value='Delete' />";
+                                
+                            } else {
+                                echo "<input type='submit' value='Añadir pedido' />";
+                                echo "<input type='submit' formaction='../invoices/invoice-details.php' value='Nueva factura' />";
+                            }
+                        ?>
+                    </div>
+
                     <input type="hidden" name="ord-id" value="<?php if (isset($row)) echo $row["id"] ?>">
                 
                     <label for="ord-date">Date:</label>
@@ -110,23 +124,9 @@
                             }
                         }
                     }
-
                     ?>
-
-                </table>
-                
-                    <?php 
-                        if ($editing) {
-                            echo "<input class='update' type='submit' value='Update'>";
-                            echo "<input type='submit' formaction='../delivery-notes/delivery-note-details.php' value='New delivery note from order'></form>";
-                            echo "<form method='post' action='./delete-order.php'><input type='hidden' id='prod-id' name='prod-id' value='".$row["id"]."'><input class='remove' type='submit' value='Delete'></form>";
-                            
-                        } else {
-                            echo "<input type='submit' value='Añadir pedido' />";
-                            echo "<input type='submit' formaction='../invoices/invoice-details.php' value='Nueva factura' /></form>";
-                        }
-                    ?>
-                
+                    </table>                    
+                </form>
             </div>
         </section>
     </main>

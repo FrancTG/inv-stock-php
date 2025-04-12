@@ -47,6 +47,19 @@
                 <form class="container" action="<?php echo $actionURL; ?>" method="post">
                     <?php if ($editing) {echo "<h1>Invoice details</h1>";} else {echo "<h1>New invoice</h1>";} ?>
 
+                    <div class="form-buttons">
+                        <?php 
+                            if ($editing) {
+                                echo "<input class='update' type='submit' value='Update' />";
+                                echo "<input type='submit' formaction='./print-invoice.php' formtarget='_blank' value='Print in PDF' />";
+                                echo "<input type='submit' fromaction='./delete-product.php' value='Delete' />";
+                            } else {
+                                echo "<input type='submit' value='Create' />";
+                            }
+                        ?>
+                    </div>
+
+
                     <input type="hidden" name="invoice-id" value="<?php if (isset($row)) echo $row["id"] ?>">
                 
                     <label for="invoice-date">Date:</label>
@@ -127,17 +140,9 @@
 
                     ?>
 
-                </table>
+                    </table>
                 
-                    <?php 
-                        if ($editing) {
-                            echo "<input class='update' type='submit' value='Update'>";
-                            echo "<input type='submit' formaction='./print-invoice.php' value='Print PDF' /></form>";
-                            echo "<form method='post' action='./delete-product.php'><input type='hidden' id='prod-id' name='prod-id' value='".$row["id"]."'><input class='remove' type='submit' value='Delete'></form>";
-                        } else {
-                            echo "<input type='submit' value='Create'></form>";
-                        }
-                    ?>
+                </form>
                 
             </div>
         </section>

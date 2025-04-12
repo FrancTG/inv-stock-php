@@ -36,6 +36,17 @@
                 <form class="container" action="<?php echo $actionURL; ?>" method="post">
                     <?php if ($editing) {echo "<h1>Supplier details</h1>";} else {echo "<h1>New supplier</h1>";} ?>
 
+                    <div class="form-buttons">
+                        <?php 
+                            if ($editing) {
+                                echo "<input type='submit' value='Update' />";
+                                echo "<input type='submit' fromaction='./delete-supplier.php' value='Delete' />";
+                            } else {
+                                echo "<input type='submit' value='Create' />";
+                            }
+                        ?>
+                    </div>
+
                     <input type="hidden" name="supp-id" value="<?php if (isset($row)) echo $row["id"] ?>">
                     
                     <label for="supp-img">Select image:</label>
@@ -63,15 +74,7 @@
                     <label for="supp-iban">IBAN:</label>
                     <input type="text" name="supp-iban" id="supp-iban" placeholder="e.g. ES7921000813610123456789" value="<?php if (isset($row)) echo $row["iban"] ?>">
         
-                    <?php 
-                        if ($editing) {
-                            echo "<input type='submit' value='Update'></form>";
-                            echo "<form method='post' action='./delete-supplier.php'><input type='hidden' id='supp-id' name='supp-id' value='".$row["id"]."'><input type='submit' value='Delete'></form>";
-                        } else {
-                            echo "<input type='submit' value='Create'></form>";
-                        }
-                    ?>
-                
+                </from>
             </div>
         </section>
     </main>

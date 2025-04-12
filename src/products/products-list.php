@@ -23,7 +23,6 @@
                         <ion-icon name="search-outline"></ion-icon>
                         <input type="text" name="search" id="search" placeholder="...">
                     </form>
-                    <button onclick><ion-icon name="list-outline"></ion-icon></button>
                     <a href="./product-details.php" class="btn add"><ion-icon name="add-outline"></ion-icon> New</a>
                 </div>
                 <div class="grid">

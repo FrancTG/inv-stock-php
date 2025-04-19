@@ -30,7 +30,14 @@ for ($i = 0; $i < sizeof($prodIds); $i++) {
     $res->execute();
 }
 
-header("Location: delivery-note-list.php");
+for ($i = 0; $i < sizeof($prodIds); $i++) {
+    $SQL = "UPDATE product SET stock = stock - ? WHERE id = ?";
+    $res = $mysqli->prepare($SQL);
+    $res->bind_param("ii",$quantitys[$i],$prodIds[$i]);
+    $res->execute();
+}
+
+header("Location: delivery-notes-list.php");
 exit();
 
 ?>

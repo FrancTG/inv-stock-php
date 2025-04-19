@@ -21,7 +21,7 @@
                     if (isset($_GET["info"])) {
                         switch($_GET["info"]) {
                             case 1:
-                                echo "<p class=''>Incorrect username or passoword</p>";
+                                echo "<p class=''>Incorrect username or password</p>";
                                 break;
                             case 2:
                                 echo "<p class=''>You have been logged out successfully</p>";

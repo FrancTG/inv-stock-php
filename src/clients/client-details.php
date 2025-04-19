@@ -39,10 +39,10 @@
                     <div class="form-buttons">
                         <?php 
                             if ($editing) {
-                                echo "<input type='submit' value='Update' />";
-                                echo "<input type='submit' fromaction='./delete-client.php' value='Delete' />";
+                                echo "<button title='Update client' class='update' type='submit'><ion-icon name='refresh-outline'></ion-icon></button>";
+                                echo "<button title='Delete client' class='delete' type='submit' formaction='./delete-client.php'><ion-icon name='trash-outline'></ion-icon></button>";
                             } else {
-                                echo "<input type='submit' value='Create' />";
+                                echo "<input class='add' type='submit' value='Create' />";
                             }
                         ?>
                     </div>

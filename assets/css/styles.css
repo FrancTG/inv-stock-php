@@ -20,12 +20,15 @@ main > section {
     padding: 50px;
     overflow-y: auto;
 }
-input[type=submit] {
+input[type=submit], button[type=submit] {
+    border: 0;
+    border-radius: 10px;
+    padding: 10px 15px;
     width: auto;
     background-color: #6076f6;
     margin: 10px 0;
 }
-input[type=submit]:hover {
+input[type=submit]:hover, button[type=submit]:hover {
     background-color: #3a7fdf;
     cursor: pointer;
     transition: 0.3s;
@@ -209,8 +212,8 @@ aside > .logged-account > .logout {
 .add:hover {background-color: #23dc45 !important;}
 .update {background-color: #bccb18 !important;}
 .update:hover {background-color: #badc23 !important;}
-.remove {background-color: #c41c1c !important;}
-.remove:hover {background-color: #dc2c23 !important;}
+.delete {background-color: #c41c1c !important;}
+.delete:hover {background-color: #dc2c23 !important;}
 
 .grid {
     display: grid;

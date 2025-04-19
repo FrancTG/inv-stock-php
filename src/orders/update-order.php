@@ -1,26 +1,27 @@
 <?php
 
 require "../db.php";
+require "../security.php";
 
-$id = $_POST["prod-id"];
-$img = $_POST["prod-img"];
-$ean = $_POST["prod-ean"];
-$name = $_POST["prod-name"];
-$stock = $_POST["prod-stock"];
-$weight = $_POST["prod-weight"];
-$volume = $_POST["prod-volume"];
-$category = $_POST["prod-category"];
-$iva = $_POST["prod-iva"];
-$price = $_POST["prod-price"];
-$discount = $_POST["prod-img"];
-$description = $_POST["prod-description"];
+$id = $_POST["ord-id"];
+$client = $_POST["ord-client"];
+$date = $_POST["ord-date"];
+$prodIds = $_POST["ord-prodid"];
+$quantitys = $_POST["ord-quantity"];
 
-/*$SQL= "UPDATE product SET ean = ?,name = ?,stock = ?,weight = ?,volume = ?,category = ?,iva = ?,price = ?,discount = ?,description = ?,img_src = ? WHERE id = ?";
+$SQL = "UPDATE orders SET id_client = ?, date = ? WHERE id = ?";
 $res = $mysqli->prepare($SQL);
-$res->bind_param("isiddsdddssi",$ean,$name,$stock,$weight,$volume,$category,$iva,$price,$discount,$description,$img,$id);
-$res->execute();*/
+$res->bind_param("isi",$client,$date,$id);
+$res->execute();
 
-header("Location: products-list.php");
+for ($i = 0; $i < sizeof($prodIds); $i++) {
+    $SQL = "UPDATE order_line SET quantity = ? WHERE id_order = ? and id_product = ?";
+    $res = $mysqli->prepare($SQL);
+    $res->bind_param("iii",$quantitys[$i],$id,$prodIds[$i]);
+    $res->execute();
+}
+
+header("Location: orders-list.php");
 exit();
 
 ?>

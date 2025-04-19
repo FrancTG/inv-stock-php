@@ -26,9 +26,10 @@
                 $res = $stmt->get_result();
                 $row = $res->fetch_assoc();
                 $editing = true;
-            } elseif (isset($_GET["cart"])){
+            } else {
                 $actionURL = './new-order.php';
-                $cartItems = json_decode($_GET["cart"],true);
+                $prodIds = $_POST["ord-prodid"];
+                $quantitys = $_POST["ord-quantity"];
             }
 
         ?>
@@ -40,13 +41,11 @@
                     <div class="form-buttons">
                         <?php 
                             if ($editing) {
-                                echo "<input class='update' type='submit' value='Update' />";
-                                echo "<input type='submit' formaction='../delivery-notes/delivery-note-details.php' value='New delivery note from order' />";
-                                echo "<input type='submit' fromaction='./delete-order.php' value='Delete' />";
-                                
+                                echo "<button title='Update order' class='update' type='submit' ><ion-icon name='refresh-outline'></ion-icon></button>";
+                                echo "<button title='Delete order' class='delete' type='submit' formaction='./delete-order.php'><ion-icon name='trash-outline'></ion-icon></button>";
+                                echo "<button type='submit' formaction='../delivery-notes/delivery-note-details.php'>New delivery note from order</button>";                                
                             } else {
-                                echo "<input type='submit' value='Añadir pedido' />";
-                                echo "<input type='submit' formaction='../invoices/invoice-details.php' value='Nueva factura' />";
+                                echo "<button class='add' type='submit'>Añadir pedido</button>";
                             }
                         ?>
                     </div>
@@ -103,11 +102,11 @@
                     } else {
                         $SQL = "SELECT id,name,iva,price,discount FROM product WHERE id IN (";
 
-                        for ($i = 0; $i < count($cartItems)-1; $i++) {
-                            $SQL = $SQL . $cartItems[$i]["id"] . ",";
+                        for ($i = 0; $i < count($prodIds)-1; $i++) {
+                            $SQL = $SQL . $prodIds[$i] . ",";
                         }
 
-                        $SQL = $SQL . $cartItems[$i]["id"] . ")";
+                        $SQL = $SQL . $prodIds[$i] . ")";
                         $stmt = $mysqli->prepare($SQL);
                         $stmt->execute();
                         $res = $stmt->get_result();
@@ -115,7 +114,7 @@
                         if ($res->num_rows > 0) {
                             $index = 0;
                             while($row3 = $res->fetch_assoc()) {
-                                $quantity = $cartItems[$index]["quantity"];
+                                $quantity = $quantitys[$index];
                                 
                                 $total = $row3["price"] * $quantity;
                                 $total = $total - ($total * ($row3["discount"] / 100));

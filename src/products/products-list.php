@@ -42,7 +42,7 @@
                                         <div class='product-price'>" . $row["price"] . " €</div>
                                         <div class='product-stock'>". $row["stock"] . " left</div>
                                     </a>
-                                    <div class='product-order'><input class='prod-quantity' type='number' name='prod-quantity' /><ion-icon onclick='addProductToCart(event,".$row["id"].")' name='bag-add-outline'></ion-icon></div>
+                                    <div class='product-order'><input class='prod-quantity' type='number' name='prod-quantity' /><ion-icon title='Add to cart' onclick='addProductToCart(event,".$row["id"].")' name='bag-add-outline'></ion-icon></div>
                                 </div>";
                             }
                         } else {
@@ -62,7 +62,6 @@
                 if (orderProducts === null) {
                     orderProducts = []
                     orderProducts.push({id,quantity})
-                    document.cookie="cart="
                     localStorage.setItem("orderProducts",JSON.stringify(orderProducts))
                 } else {
                     let index = orderProducts.findIndex((prod) => prod.id === id)

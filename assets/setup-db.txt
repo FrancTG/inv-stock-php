@@ -105,11 +105,22 @@ CREATE TABLE invoice_line (
 );
 
 CREATE TABLE purchase (
-    id_product INTEGER,
+    id INTEGER PRIMARY KEY,
     id_supplier INTEGER,
-    PRIMARY KEY (id_product, id_supplier),
-    FOREIGN KEY (id_product) REFERENCES product(id),
+    date DATE,
     FOREIGN KEY (id_supplier) REFERENCES supplier(id)
+);
+
+CREATE TABLE purchase_line (
+    id_purchase INTEGER,
+    id_product INTEGER,
+    quantity INTEGER NOT NULL,
+    buy_price FLOAT,
+    profit FLOAT,
+    custom_price FLOAT,
+    PRIMARY KEY (id_purchase, id_product),
+    FOREIGN KEY (id_product) REFERENCES product(id),
+    FOREIGN KEY (id_purchase) REFERENCES purchase(id)
 );
 
 CREATE TABLE cashier_sale (

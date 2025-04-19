@@ -48,12 +48,12 @@
                     <div class="form-buttons">
                         <?php 
                             if ($editing) {
-                                echo "<input class='update' type='submit' value='Update'>";
-                                echo "<input type='submit' formaction='../invoices/invoice-details.php' value='Create invoice from delivery note' />";
-                                echo "<input type='submit' formaction='./print-delivery-note.php' formtarget='_blank' value='Print in PDF' />";
-                                echo "<input type='submit' fromaction='./delete-product.php' value='Delete' />";
+                                echo "<button title='Update delivery note' class='update' type='submit'><ion-icon name='refresh-outline'></ion-icon></button>";
+                                echo "<button title='Delete delivery note' class='delete' type='submit' formaction='./delete-delivery-note.php'><ion-icon name='trash-outline'></ion-icon></button>";
+                                echo "<button type='submit' formaction='../invoices/invoice-details.php'>Create invoice from delivery note</button>";
+                                echo "<button type='submit' formaction='./print-delivery-note.php' formtarget='_blank'>Print in PDF</button>";
                             } else {
-                                echo "<input type='submit' value='Create' />";
+                                echo "<button type='submit'>Create</button>";
                             }
                         ?>
                     </div>

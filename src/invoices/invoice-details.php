@@ -16,7 +16,7 @@
             $editing = false;
 
             if (isset($_GET["id"])) {
-                $actionURL = './update-delivery-note.php';
+                $actionURL = './update-invoice.php';
 
                 $SQL= "SELECT id,id_client,date,description FROM invoice WHERE id=?";
 
@@ -33,11 +33,18 @@
                 $editing = true;
             } else {
                 $actionURL = './new-invoice.php';
-                $date = $_POST["dnote-date"];
-                $idClient = $_POST["dnote-client"];
-                $ordProdId = $_POST["dnote-prodid"];
-                $quantitys = $_POST["dnote-quantity"];
-                $discounts = $_POST["dnote-discount"];
+                if (isset($_POST["dnote-prodid"])) {
+                    $date = $_POST["dnote-date"];
+                    $idClient = $_POST["dnote-client"];
+                    $ordProdId = $_POST["dnote-prodid"];
+                    $quantitys = $_POST["dnote-quantity"];
+                    $discounts = $_POST["dnote-discount"];
+                } else {
+                    $date = '';
+                    $idClient = '';
+                    $ordProdId = $_POST["ord-prodid"];
+                    $quantitys = $_POST["ord-quantity"];
+                }
                 $description = "";
             }
 
@@ -50,11 +57,11 @@
                     <div class="form-buttons">
                         <?php 
                             if ($editing) {
-                                echo "<input class='update' type='submit' value='Update' />";
-                                echo "<input type='submit' formaction='./print-invoice.php' formtarget='_blank' value='Print in PDF' />";
-                                echo "<input type='submit' fromaction='./delete-product.php' value='Delete' />";
+                                echo "<button title='Update invoice' class='update' type='submit'><ion-icon name='refresh-outline'></ion-icon></button>";
+                                echo "<button title='Delete invoice' class='delete' type='submit' formaction='./delete-invoice.php'><ion-icon name='trash-outline'></ion-icon></button>";
+                                echo "<button type='submit' formaction='./print-invoice.php' formtarget='_blank'>Print in PDF</button>";
                             } else {
-                                echo "<input type='submit' value='Create' />";
+                                echo "<button class='add' type='submit'>Create</button>";
                             }
                         ?>
                     </div>
@@ -128,7 +135,11 @@
                             $index = 0;
                             while($row3 = $res->fetch_assoc()) {
                                 $quantity = $quantitys[$index];
-                                $discount = $discounts[$index];
+                                if (isset($discounts)) {
+                                    $discount = $discounts[$index];
+                                } else {
+                                    $discount = $row3["discount"];
+                                }
                                 
                                 $total = $row3["price"] * $quantity;
                                 $total = $total - ($total * ($discount / 100));

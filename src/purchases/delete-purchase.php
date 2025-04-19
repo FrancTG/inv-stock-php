@@ -3,19 +3,19 @@
 require "../db.php";
 require "../security.php";
 
-$id = $_POST["ord-id"];
+$id = $_POST["pur-id"];
 
-$SQL= "DELETE FROM order_line WHERE id_order = ?";
+$SQL= "DELETE FROM purchase_line WHERE id_purchase = ?";
 $res = $mysqli->prepare($SQL);
 $res->bind_param("i",$id);
 $res->execute();
 
-$SQL= "DELETE FROM orders WHERE id = ?";
+$SQL= "DELETE FROM purchase WHERE id = ?";
 $res = $mysqli->prepare($SQL);
 $res->bind_param("i",$id);
 $res->execute();
 
-header("Location: orders-list.php");
+header("Location: purchases-list.php");
 exit();
 
 ?>

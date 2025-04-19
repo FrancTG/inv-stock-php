@@ -9,7 +9,7 @@ Inventory and business manager with PHP
 
 3. Change the ```src/settings.php``` file.
 
-4. Open ```src/insert_new_user.php``` file, uncomment the code, change user data and password and open it in your browser. Then __re-comment the file or delete it__ to prevent user creation until it is available in the application.
+4. Open ```src/insert_new_user.php``` file, uncomment the code, change user data and password and open it in your browser. Then __re-comment the file or delete it__.
 
 ## License
 MIT © FrancTG

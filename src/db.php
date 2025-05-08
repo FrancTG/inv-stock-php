@@ -1,6 +1,6 @@
 <?php
     // mysqli('ip_address','db_user','db_password','db_name');
-    $mysqli = new mysqli('localhost', 'root', '', 'inv-stock');
+    $mysqli = new mysqli('localhost', 'root', '', 'inv-stock-new');
     if ($mysqli->connect_error) {
         die ("Conexión fallida: " . $mysqli->connect_error);
     }

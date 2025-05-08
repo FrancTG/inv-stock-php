@@ -17,30 +17,19 @@
                     <input type="text" name="search" id="search" placeholder="...">
                 </form>
             </div>
-            <div class="list">
-                <?php
-                    $SQL= "SELECT delivery_note.id,delivery_note.date,client.company,client.name FROM delivery_note INNER JOIN client ON delivery_note.id_client = client.id";
-
-                    $res = $mysqli->query($SQL);
-
-                    if ($res->num_rows > 0) {
-                        // output data of each row
-                        while($row = $res->fetch_assoc()) {
-                            echo "<div class='list-item'>
-                            <input type='hidden' name='dnote-id[]' value='".$row["id"]."' />
-                            <a href='./delivery-note-details.php?id=" . $row["id"] . "'>
-                                <div class='dnote-ref'>P-" . $row["id"] . "/" . $row["date"] . "</div>
-                                <div class='dnote-company'>".$row["name"] ." from ". $row["company"] . "</div>
-                                <div class='dnote-total'>Total 100 €</div>
-                            </a></div>";
-                        }
-                    } else {
-                        echo "0 results";
-                    }
-                ?>
-            </div>
+            <div id='document-container' class="list"></div>
         </section>
     </main>
+
+    
+    <script src="../../assets/js/scripts.js"></script>
+    <script>
+        let input = document.getElementById('search');
+        showDocuments('delivery-note',input.value);
+        input.addEventListener('input', () => {
+            showDocuments('delivery-note',input.value);
+        })
+    </script>
 
     <?php require "../includes/icons.php" ?>
 </body>

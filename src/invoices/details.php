@@ -12,13 +12,11 @@
         <?php
             require "../includes/aside.php";
 
-            $actionURL = "";
             $editing = false;
 
             if (isset($_GET["id"])) {
-                $actionURL = './update-invoice.php';
 
-                $SQL= "SELECT id,id_client,date,description FROM invoice WHERE id=?";
+                $SQL= "SELECT id,id_client,date,description FROM document WHERE id=?";
 
                 $stmt = $mysqli->prepare($SQL);
                 $stmt->bind_param("i",$_GET["id"]);
@@ -32,48 +30,52 @@
 
                 $editing = true;
             } else {
-                $actionURL = './new-invoice.php';
-                if (isset($_POST["dnote-prodid"])) {
-                    $date = $_POST["dnote-date"];
-                    $idClient = $_POST["dnote-client"];
-                    $ordProdId = $_POST["dnote-prodid"];
-                    $quantitys = $_POST["dnote-quantity"];
-                    $discounts = $_POST["dnote-discount"];
+                if (isset($_POST["date"])) {
+                    $date = $_POST["date"];
                 } else {
                     $date = '';
-                    $idClient = '';
-                    $ordProdId = $_POST["ord-prodid"];
-                    $quantitys = $_POST["ord-quantity"];
                 }
+
+                if (isset($_POST["idclient"])) {
+                    $idClient = $_POST["client"];
+                } else {
+                    $idClient = '';
+                }
+
+                if (isset($_POST["discount"])) {
+                    $discounts = $_POST["discount"];
+                }
+                $ordProdId = $_POST["prodid"];
+                $quantitys = $_POST["quantity"];                
                 $description = "";
             }
 
         ?>
         <section>
             <div class="item-details">
-                <form class="container" action="<?php echo $actionURL; ?>" method="post">
+                <form class="container" method="post">
                     <?php if ($editing) {echo "<h1>Invoice details</h1>";} else {echo "<h1>New invoice</h1>";} ?>
 
                     <div class="form-buttons">
                         <?php 
                             if ($editing) {
-                                echo "<button title='Update invoice' class='update' type='submit'><ion-icon name='refresh-outline'></ion-icon></button>";
+                                echo "<button title='Update invoice' class='update' type='submit' formaction='./update-invoice.php'><ion-icon name='refresh-outline'></ion-icon></button>";
                                 echo "<button title='Delete invoice' class='delete' type='submit' formaction='./delete-invoice.php'><ion-icon name='trash-outline'></ion-icon></button>";
                                 echo "<button type='submit' formaction='./print-invoice.php' formtarget='_blank'>Print in PDF</button>";
                             } else {
-                                echo "<button class='add' type='submit'>Create</button>";
+                                echo "<button class='add' type='submit' formaction='./new-invoice.php'>Create</button>";
                             }
                         ?>
                     </div>
 
 
-                    <input type="hidden" name="invoice-id" value="<?php if (isset($row)) echo $row["id"] ?>">
+                    <input type="hidden" name="id" value="<?php if (isset($row)) echo $row["id"] ?>">
                 
-                    <label for="invoice-date">Date:</label>
-                    <input id="invoice-date" name="invoice-date" type="date" placeholder="e.g. 25/10/2025" value="<?php echo $date ?>">
+                    <label for="date">Date:</label>
+                    <input id="date" name="date" type="date" placeholder="e.g. 25/10/2025" value="<?php echo $date ?>">
 
-                    <label for="invoice-client">Client:</label>
-                    <select name="invoice-client" id="invoice-client">
+                    <label for="client">Client:</label>
+                    <select name="client" id="client">
                         <?php 
                             $SQL= "SELECT id,name,company FROM client";
 
@@ -93,8 +95,8 @@
                         ?>
                     </select>
 
-                    <label for="invoice-desc">Description and additional observations:</label>
-                    <textarea name="invoice-desc" id="invoice-desc" placeholder="Paid by card, cash, ... " cols="30" rows="10"><?php echo $description ?></textarea>
+                    <label for="desc">Description and additional observations:</label>
+                    <textarea name="desc" id="desc" placeholder="Paid by card, cash, ... " cols="30" rows="10"><?php echo $description ?></textarea>
 
                     <h2>Products</h2>
 
@@ -104,7 +106,7 @@
                     <?php 
 
                     if ($editing) {
-                        $SQL= "SELECT invoice_line.quantity,product.id,product.name,product.iva,product.price,invoice_line.discount FROM invoice_line INNER JOIN product ON invoice_line.id_product = product.id WHERE invoice_line.id_invoice = ?";
+                        $SQL= "SELECT document_line.quantity,product.id,product.name,product.iva,product.price,document_line.discount FROM document_line INNER JOIN product ON document_line.id_product = product.id WHERE document_line.id_doc = ?";
 
                         $stmt = $mysqli->prepare($SQL);
                         $stmt->bind_param("i",$_GET["id"]);
@@ -115,7 +117,7 @@
                             while($row3 = $res->fetch_assoc()) {
                                 $total = $row3["price"] * $row3["quantity"];
                                 $total = $total - ($total * ($row3["discount"] / 100));
-                                echo "<tr><td><input type='number' name='invoice-prodid[]' value='".$row3["id"]."' /></td><td>".$row3["name"]."</td><td>".$row3["iva"]."</td><td>".$row3["price"]."</td><td><input type='number' name='invoice-discount[]' value='".$row3["discount"]."' /></td><td><input type='number' name='invoice-quantity[]' value='".$row3["quantity"]."' /></td><td>".$total."</td></tr>";
+                                echo "<tr><td><input type='number' name='prodid[]' value='".$row3["id"]."' /></td><td>".$row3["name"]."</td><td>".$row3["iva"]."</td><td>".$row3["price"]."</td><td><input type='number' name='discount[]' value='".$row3["discount"]."' /></td><td><input type='number' name='quantity[]' value='".$row3["quantity"]."' /></td><td>".$total."</td></tr>";
                             }
                         }
                     } else {
@@ -143,7 +145,13 @@
                                 
                                 $total = $row3["price"] * $quantity;
                                 $total = $total - ($total * ($discount / 100));
-                                echo "<tr><td><input type='number' name='invoice-prodid[]' value='".$row3["id"]."' /></td><td>".$row3["name"]."</td><td>".$row3["iva"]."</td><td>".$row3["price"]."</td><td><input type='number' name='invoice-discount[]' value='".$discount."' /></td><td><input type='number' name='invoice-quantity[]' value='".$quantity."' /></td><td>".$total."</td></tr>";
+                                echo "<tr>
+                                <td><input type='number' name='prodid[]' value='".$row3["id"]."' /></td>
+                                <td>".$row3["name"]."</td><td>".$row3["iva"]."</td>
+                                <td>".$row3["price"]."</td><td><input type='number' name='discount[]' value='".$discount."' /></td>
+                                <td><input type='number' name='quantity[]' value='".$quantity."' /></td><td>".$total."</td>
+                                <td><button type='button' onclick='deleteProduct(event)' >X</button></td>
+                                </tr>";
                                 $index = $index + 1;
                             }
                         }
@@ -158,6 +166,12 @@
             </div>
         </section>
     </main>
+
+    <script>
+        function deleteProduct(event) {
+            event.target.parentNode.parentNode.remove()
+        }
+    </script>
 
     <?php require "../includes/icons.php" ?>
 </body>

@@ -3,30 +3,30 @@
 require "../db.php";
 require "../security.php";
 
-$id = $_POST["pur-id"];
-$date = $_POST["pur-date"];
-$supplier = $_POST["pur-supplier"];
-$prodIds = $_POST["pur-prodid"];
-$quantitys = $_POST["pur-quantity"];
-$buyPrices = $_POST["pur-buyprice"];
-$profits = $_POST["pur-profit"];
-$cPrices = $_POST["pur-cprice"];
+$id = $_POST["id"];
+$date = $_POST["date"];
+$supplier = $_POST["supplier"];
+$prodIds = $_POST["prodid"];
+$quantitys = $_POST["quantity"];
+$cPrices = $_POST["cprice"];
 
-$SQL= "SELECT MAX(id) FROM purchase;";
+$docType = 'purchase';
+
+$SQL= "SELECT MAX(id) FROM document;";
 $result = $mysqli->query($SQL);
 $row = $result->fetch_assoc();
-$purchaseID = $row["MAX(id)"];
-$purchaseID = $purchaseID + 1;
+$docId = $row["MAX(id)"];
+$docId = $docId + 1;
 
-$SQL = "INSERT INTO purchase(id,id_supplier, date) VALUES (?,?,?);";
+$SQL = "INSERT INTO document(id,id_supplier,docType,date) VALUES (?,?,?,?);";
 $res = $mysqli->prepare($SQL);
-$res->bind_param("iis",$purchaseID,$supplier,$date);
+$res->bind_param("iiss",$docId,$supplier,$docType,$date);
 $res->execute();
 
 for ($i = 0; $i < sizeof($prodIds); $i++) {
-    $SQL = "INSERT INTO purchase_line(id_purchase,id_product,quantity,buy_price,profit,custom_price) VALUES (?,?,?,?,?,?);";
+    $SQL = "INSERT INTO document_line(id_doc,id_product,quantity,custom_price) VALUES (?,?,?,?);";
     $res = $mysqli->prepare($SQL);
-    $res->bind_param("iiiddd",$purchaseID,$prodIds[$i],$quantitys[$i],$buyPrices[$i],$profits[$i],$cPrices[$i]);
+    $res->bind_param("iiid",$docId,$prodIds[$i],$quantitys[$i],$cPrices[$i]);
     $res->execute();
 }
 

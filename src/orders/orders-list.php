@@ -17,30 +17,18 @@
                     <input type="text" name="search" id="search" placeholder="...">
                 </form>
             </div>
-            <div class="list">
-                <?php
-                    $SQL= "SELECT orders.id,orders.date,client.company,client.name FROM orders INNER JOIN client ON orders.id_client = client.id";
-
-                    $res = $mysqli->query($SQL);
-
-                    if ($res->num_rows > 0) {
-                        // output data of each row
-                        while($row = $res->fetch_assoc()) {
-                            echo "<div class='list-item'>
-                            <input type='hidden' name='ord-id[]' value='".$row["id"]."' />
-                            <a href='./order-details.php?id=" . $row["id"] . "'>
-                                <div class='order-ref'>P-" . $row["id"] . "/" . $row["date"] . "</div>
-                                <div class='order-company'>".$row["name"] ." from ". $row["company"] . "</div>
-                                <div class='order-total'>Total 100 €</div>
-                            </a></div>";
-                        }
-                    } else {
-                        echo "0 results";
-                    }
-                ?>
-            </div>
+            <div id='document-container' class="list"></div>
         </section>
     </main>
+
+    <script src="../../assets/js/scripts.js"></script>
+    <script>
+        showDocuments('order','')
+        let input = document.getElementById('search');
+        input.addEventListener('input', () => {
+            showDocuments('order',input.value);
+        })
+    </script>
 
     <?php require "../includes/icons.php" ?>
 </body>

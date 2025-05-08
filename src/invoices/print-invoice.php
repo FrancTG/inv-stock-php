@@ -5,13 +5,13 @@ require "../db.php";
 require "../../assets/fpdf.php";
 require "../settings.php";
 
-$id = $_POST["invoice-id"];
-$date = $_POST["invoice-date"];
-$idClient = $_POST["invoice-client"];
-$desc = $_POST["invoice-desc"];
-$prodIDs = $_POST["invoice-prodid"];
-$discount = $_POST["invoice-discount"];
-$quantity = $_POST["invoice-quantity"];
+$id = $_POST["id"];
+$date = $_POST["date"];
+$idClient = $_POST["client"];
+$desc = $_POST["desc"];
+$prodIDs = $_POST["prodid"];
+$discount = $_POST["discount"];
+$quantity = $_POST["quantity"];
 
 $SQL= "SELECT identification_number,name,company,address,city,country,phone_number FROM client WHERE id = ?";
 
@@ -22,7 +22,7 @@ $res = $stmt->get_result();
 $clientData = $res->fetch_assoc();
 
 
-$SQL= "SELECT product.id,product.name,product.description,product.iva,product.price FROM invoice_line INNER JOIN product ON invoice_line.id_product = product.id WHERE invoice_line.id_invoice = ?";
+$SQL= "SELECT product.id,product.name,product.description,product.iva,product.price FROM document_line INNER JOIN product ON document_line.id_product = product.id WHERE document_line.id_doc = ?";
 
 $stmt = $mysqli->prepare($SQL);
 $stmt->bind_param("i",$id);

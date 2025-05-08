@@ -18,10 +18,10 @@
                         <input type="text" name="search" id="search" placeholder="...">
                     </form>
                 </div>
-                <div class="list">
+                <div id='document-container' class="list">
 
                     <?php
-                        $SQL= "SELECT purchase.id,purchase.date,supplier.name,supplier.company FROM purchase INNER JOIN supplier ON supplier.id = purchase.id_supplier";
+                        /*$SQL= "SELECT document.id,document.date,supplier.name,supplier.company FROM document INNER JOIN supplier ON supplier.id = document.id_supplier WHERE docType='purchase'";
 
                         $res = $mysqli->query($SQL);
 
@@ -29,7 +29,7 @@
                             // output data of each row
                             while($row = $res->fetch_assoc()) {
                                 echo "<div class='list-item'>
-                                <input type='hidden' name='pur-id[]' value='".$row["id"]."' />
+                                <input type='hidden' name='id[]' value='".$row["id"]."' />
                                 <a class='list-item' href='./purchase-details.php?id=" . $row["id"] . "'>
                                     <div>" . $row["id"] . "</div>
                                     <div>" . $row["date"] . "</div>
@@ -38,15 +38,23 @@
                             }
                         } else {
                             echo "0 results";
-                        }
+                        }*/
                     ?>
                 </div>
             </div>
         </section>
     </main>
 
-    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
-    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <script src="../../assets/js/scripts.js"></script>
+    <script>
+        showDocuments('purchase','')
+        let input = document.getElementById('search');
+        input.addEventListener('input', () => {
+            showDocuments('purchase',input.value);
+        })
+    </script>
+
+    <?php require "../includes/icons.php" ?>
 </body>
 </html>
 

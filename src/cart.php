@@ -25,9 +25,9 @@
                     <h1>Cart Items</h1>
 
                     <div class="form-buttons">
-                        <button type='submit' formaction='./orders/order-details.php'>New Order</button>
-                        <button type='submit' formaction='./invoices/invoice-details.php'>New Invoice</button>
-                        <button type='submit' formaction='./purchases/purchase-details.php'>New purchase from items</button>
+                        <button type='submit' formaction='./orders/details.php'>New Order</button>
+                        <button type='submit' formaction='./invoices/details.php'>New Invoice</button>
+                        <button type='submit' formaction='./purchases/details.php'>New purchase from items</button>
                     </div>
 
                     <table class="item-prod-list">
@@ -54,7 +54,7 @@
                                 
                                 $total = $row["price"] * $quantity;
                                 $total = $total - ($total * ($row["discount"] / 100));
-                                echo "<tr><td><input type='number' name='ord-prodid[]' value='".$row["id"]."' /></td><td>".$row["name"]."</td><td>".$row["iva"]."</td><td>".$row["price"]."</td><td>".$row["discount"]."</td><td><input type='number' name='ord-quantity[]' value='".$quantity."' /></td><td>".$total."</td><td><button type='button' onclick='removeItemFromCart(event,".$row["id"].")'>X</button></td></tr>";
+                                echo "<tr><td><input type='number' name='prodid[]' value='".$row["id"]."' /></td><td>".$row["name"]."</td><td>".$row["iva"]."</td><td>".$row["price"]."</td><td>".$row["discount"]."</td><td><input type='number' name='quantity[]' value='".$quantity."' /></td><td>".$total."</td><td><button type='button' onclick='removeItemFromCart(event,".$row["id"].")'>X</button></td></tr>";
                                 $index = $index + 1;
                             }
                         }

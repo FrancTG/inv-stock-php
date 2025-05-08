@@ -5,12 +5,12 @@ require "../db.php";
 require "../../assets/fpdf.php";
 require "../settings.php";
 
-$id = $_POST["dnote-id"];
-$date = $_POST["dnote-date"];
-$idClient = $_POST["dnote-client"];
-$prodIDs = $_POST["dnote-prodid"];
-$discount = $_POST["dnote-discount"];
-$quantity = $_POST["dnote-quantity"];
+$id = $_POST["id"];
+$date = $_POST["date"];
+$idClient = $_POST["client"];
+$prodIDs = $_POST["prodid"];
+$discount = $_POST["discount"];
+$quantity = $_POST["quantity"];
 
 $SQL= "SELECT identification_number,name,company,address,city,country,phone_number FROM client WHERE id = ?";
 
@@ -21,7 +21,7 @@ $res = $stmt->get_result();
 $clientData = $res->fetch_assoc();
 
 
-$SQL= "SELECT product.id,product.name,product.description,product.iva,product.price FROM delivery_note_line INNER JOIN product ON delivery_note_line.id_product = product.id WHERE delivery_note_line.id_delivery_note = ?";
+$SQL= "SELECT product.id,product.name,product.description,product.iva,product.price FROM document_line INNER JOIN product ON document_line.id_product = product.id WHERE document_line.id_doc = ?";
 
 $stmt = $mysqli->prepare($SQL);
 $stmt->bind_param("i",$id);

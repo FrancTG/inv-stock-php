@@ -3,28 +3,29 @@
 require "../db.php";
 require "../security.php";
 
-$client = $_POST["ord-client"];
-$date = $_POST["ord-date"];
-$prodIds = $_POST["ord-prodid"];
-$quantitys = $_POST["ord-quantity"];
+$client = $_POST["client"];
+$date = $_POST["date"];
+$prodIds = $_POST["prodid"];
+$quantitys = $_POST["quantity"];
 
-$notSent = "NOT_SENT";
+$status = "NOT_SENT";
+$docType = "order";
 
-$SQL= "SELECT MAX(id) FROM orders;";
+$SQL= "SELECT MAX(id) FROM document;";
 $result = $mysqli->query($SQL);
 $row = $result->fetch_assoc();
-$orderID = $row["MAX(id)"];
-$orderID = $orderID + 1;
+$docId = $row["MAX(id)"];
+$docId = $docId + 1;
 
-$SQL = "INSERT INTO orders(id,id_client, date) VALUES (?,?,?);";
+$SQL = "INSERT INTO document(id,id_client,docType,date,status) VALUES (?,?,?,?,?);";
 $res = $mysqli->prepare($SQL);
-$res->bind_param("iis",$orderID,$client,$date);
+$res->bind_param("iisss",$docId,$client,$docType,$date,$status);
 $res->execute();
 
 for ($i = 0; $i < sizeof($prodIds); $i++) {
-    $SQL = "INSERT INTO order_line(id_order,id_product,quantity,status) VALUES (?,?,?,?);";
+    $SQL = "INSERT INTO document_line(id_doc,id_product,quantity) VALUES (?,?,?);";
     $res = $mysqli->prepare($SQL);
-    $res->bind_param("iiis",$orderID,$prodIds[$i],$quantitys[$i],$notSent);
+    $res->bind_param("iii",$docId,$prodIds[$i],$quantitys[$i]);
     $res->execute();
 }
 

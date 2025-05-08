@@ -3,30 +3,31 @@
 require "../db.php";
 require "../security.php";
 
-$client = $_POST["invoice-client"];
-$date = $_POST["invoice-date"];
-$description = $_POST["invoice-desc"];
-$prodIds = $_POST["invoice-prodid"];
-$discounts = $_POST["invoice-discount"];
-$quantitys = $_POST["invoice-quantity"];
+$client = $_POST["client"];
+$date = $_POST["date"];
+$description = $_POST["desc"];
+$prodIds = $_POST["prodid"];
+$discounts = $_POST["discount"];
+$quantitys = $_POST["quantity"];
 
-$notSent = "NOT_SENT";
+$status = "NOT_SENT";
+$docType = "invoice";
 
-$SQL= "SELECT MAX(id) FROM delivery_note;";
+$SQL= "SELECT MAX(id) FROM document;";
 $result = $mysqli->query($SQL);
 $row = $result->fetch_assoc();
-$invoiceID = $row["MAX(id)"];
-$invoiceID = $invoiceID + 1;
+$docId = $row["MAX(id)"];
+$docId = $docId + 1;
 
-$SQL = "INSERT INTO invoice(id,id_client,date,description,status) VALUES (?,?,?,?,?);";
+$SQL = "INSERT INTO document(id,id_client,docType,date,description,status) VALUES (?,?,?,?,?,?);";
 $res = $mysqli->prepare($SQL);
-$res->bind_param("iisss",$invoiceID,$client,$date,$description,$notSent);
+$res->bind_param("iissss",$docId,$client,$docType,$date,$description,$status);
 $res->execute();
 
 for ($i = 0; $i < sizeof($prodIds); $i++) {
-    $SQL = "INSERT INTO invoice_line(id_invoice,id_product,discount,quantity) VALUES (?,?,?,?);";
+    $SQL = "INSERT INTO document_line(id_doc,id_product,discount,quantity) VALUES (?,?,?,?);";
     $res = $mysqli->prepare($SQL);
-    $res->bind_param("iiid",$invoiceID,$prodIds[$i],$discounts[$i],$quantitys[$i]);
+    $res->bind_param("iiid",$docId,$prodIds[$i],$discounts[$i],$quantitys[$i]);
     $res->execute();
 }
 

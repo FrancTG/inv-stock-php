@@ -25,35 +25,66 @@
                     </form>
                     <a href="./product-details.php" class="btn add"><ion-icon name="add-outline"></ion-icon> New</a>
                 </div>
-                <div class="grid">
-
-                    <?php
-                        $SQL= "SELECT id, name, stock, price, img_src FROM product";
-
-                        $res = $mysqli->query($SQL);
-
-                        if ($res->num_rows > 0) {
-                            while($row = $res->fetch_assoc()) {
-
-                                echo "<div class='list-item'>
-                                    <a href='./product-details.php?id=" . $row["id"] . "'>
-                                        <img src='" . $row["img_src"] . "' />
-                                        <div class='product-name'>" . $row["name"] . "</div>
-                                        <div class='product-price'>" . $row["price"] . " €</div>
-                                        <div class='product-stock'>". $row["stock"] . " left</div>
-                                    </a>
-                                    <div class='product-order'><input class='prod-quantity' type='number' name='prod-quantity' /><ion-icon title='Add to cart' onclick='addProductToCart(event,".$row["id"].")' name='bag-add-outline'></ion-icon></div>
-                                </div>";
-                            }
-                        } else {
-                            echo "0 results";
-                        }
-                    ?>
-                </div>
+                <div class="grid"></div>
             </div>
         </section>
     </main>
     <script>
+        let input = document.getElementById('search');
+        mostrarProductos(input.value)
+        input.addEventListener('input',() => {
+            mostrarProductos(input.value)
+        })
+
+        function leerDatos(){
+            if (oXML.readyState == 4) {
+                let xml = oXML.responseXML;
+                let tabla = document.getElementsByClassName('grid')[0];
+                let definicion_tabla = new String("");
+                let v;
+                let item;
+                
+                for (i = 0; i < xml.getElementsByTagName('product').length; i++){
+                    definicion_tabla = definicion_tabla + "<div class='list-item'>";
+                    item = xml.getElementsByTagName('product')[i];
+
+                    v = item.getElementsByTagName('id')[0].firstChild.data;
+                    let id = v;
+                    definicion_tabla = definicion_tabla+"<a href='./product-details.php?id=" + v + "'>";
+
+                    v = item.getElementsByTagName('img')[0].firstChild.data;
+                    definicion_tabla = definicion_tabla+"<img src='" + v + "' />";
+
+                    v = item.getElementsByTagName('name')[0].firstChild.data;
+                    definicion_tabla = definicion_tabla + "<div class='product-name'>" + v + "</div>";
+
+                    v = item.getElementsByTagName('price')[0].firstChild.data;
+                    definicion_tabla = definicion_tabla + "<div class='product-price'>" + v + " €</div>";
+
+                    v = item.getElementsByTagName('stock')[0].firstChild.data;
+                    definicion_tabla = definicion_tabla + "<div class='product-stock'>" + v + " left</div></a>";
+
+                    definicion_tabla = definicion_tabla + "<div class='product-order'><input class='prod-quantity' type='number' name='prod-quantity' /><ion-icon title='Add to cart' onclick='addProductToCart(event,"+id+")' name='bag-add-outline'></ion-icon></div>";
+
+                    definicion_tabla = definicion_tabla+"</div>";
+                }
+                tabla.innerHTML = definicion_tabla; 
+            }
+        }
+
+
+        function mostrarProductos(name) {
+            oXML = new XMLHttpRequest();
+            oXML.open('POST', 'get-products.php');
+            oXML.responseType = "document";
+            oXML.overrideMimeType("application/xml");
+            oXML.onreadystatechange = leerDatos;
+
+            oXML.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            oXML.send('name=' + name);
+        }
+
+
         function addProductToCart(event,id) {
             let quantity = event.target.parentNode.getElementsByClassName('prod-quantity')[0].value
             event.target.parentNode.childNodes[0].value = ""

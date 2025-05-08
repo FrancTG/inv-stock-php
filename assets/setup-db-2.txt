@@ -1,0 +1,75 @@
+CREATE DATABASE `inv-stock`;
+
+CREATE TABLE users (
+    id INTEGER PRIMARY KEY AUTO_INCREMENT,
+    username VARCHAR(30) NOT NULL,
+    name VARCHAR(30),
+    surnames VARCHAR(50),
+    password CHAR(60) NOT NULL,
+    rol VARCHAR(15) NOT NULL
+);
+
+CREATE TABLE product (
+    id INTEGER PRIMARY KEY AUTO_INCREMENT,
+    ean BIGINT,
+    name VARCHAR(50),
+    stock INTEGER,
+    weight FLOAT,
+    volume FLOAT,
+    category VARCHAR(50),
+    iva FLOAT,
+    price FLOAT,
+    discount FLOAT,
+    description VARCHAR(200),
+    img_src VARCHAR(200)
+);
+
+CREATE TABLE supplier (
+    id INTEGER PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(50),
+    company VARCHAR(100),
+    address VARCHAR(200),
+    city VARCHAR(100),
+    country VARCHAR(50),
+    phone_number VARCHAR(20),
+    iban VARCHAR(40),
+    img_src VARCHAR(200)
+);
+
+CREATE TABLE client (
+    id INTEGER PRIMARY KEY AUTO_INCREMENT,
+    identification_number VARCHAR(30),
+    name VARCHAR(50),
+    company VARCHAR(100),
+    address VARCHAR(200),
+    city VARCHAR(100),
+    country VARCHAR(50),
+    phone_number VARCHAR(20),
+    img_src VARCHAR(200)
+);
+
+CREATE TABLE document (
+    id INTEGER PRIMARY KEY AUTO_INCREMENT,
+    reference VARCHAR(30),
+    id_order INTEGER,
+    id_client INTEGER,
+    id_supplier INTEGER,
+    docType ENUM('order','delivery-note','invoice','purchase'),
+    date DATE NOT NULL,
+    description VARCHAR(100),
+    status VARCHAR(30),
+    FOREIGN KEY (id_order) REFERENCES document(id),
+    FOREIGN KEY (id_client) REFERENCES client(id),
+    FOREIGN KEY (id_supplier) REFERENCES supplier(id)
+);
+
+CREATE TABLE document_line (
+    id_doc INTEGER,
+    id_product INTEGER,
+    quantity INTEGER NOT NULL,
+    discount FLOAT,
+    custom_price FLOAT,
+    PRIMARY KEY (id_doc, id_product),
+    FOREIGN KEY (id_product) REFERENCES product(id),
+    FOREIGN KEY (id_doc) REFERENCES document(id)
+);

@@ -12,13 +12,11 @@
         <?php
             require "../includes/aside.php";
 
-            $actionURL = "";
             $editing = false;
 
             if (isset($_GET["id"])) {
-                $actionURL = './update-purchase.php';
 
-                $SQL= "SELECT id,id_supplier,date FROM purchase  WHERE id=?";
+                $SQL= "SELECT id,id_supplier,date FROM document WHERE id=?";
 
                 $stmt = $mysqli->prepare($SQL);
                 $stmt->bind_param("i",$_GET["id"]);
@@ -27,35 +25,34 @@
                 $row = $res->fetch_assoc();
                 $editing = true;
             } else {
-                $actionURL = './new-purchase.php';
-                $prodIds = $_POST["ord-prodid"];
-                $quantitys = $_POST["ord-quantity"];
+                $prodIds = $_POST["prodid"];
+                $quantitys = $_POST["quantity"];
                 $editing = false;
             }
         ?>
         <section>
             <div class="item-details">
-                <form class="container" action="<?php echo $actionURL; ?>" method="post">
+                <form class="container" method="post">
                     <?php if ($editing) {echo "<h1>Purchase details</h1>";} else {echo "<h1>New purchase</h1>";} ?>
 
                     <div class="form-buttons">
                         <?php 
                             if ($editing) {
-                                echo "<button title='Update client' class='update' type='submit'><ion-icon name='refresh-outline'></ion-icon></button>";
+                                echo "<button title='Update client' class='update' type='submit' formaction='./update-purchase.php'><ion-icon name='refresh-outline'></ion-icon></button>";
                                 echo "<button title='Delete client' class='delete' type='submit' formaction='./delete-purchase.php'><ion-icon name='trash-outline'></ion-icon></button>";
                             } else {
-                                echo "<input class='add' type='submit' value='Create' />";
+                                echo "<input class='add' type='submit' value='Create' formaction='./new-purchase.php' />";
                             }
                         ?>
                     </div>
 
-                    <input type="hidden" name="pur-id" value="<?php if (isset($row)) echo $row["id"] ?>">
+                    <input type="hidden" name="id" value="<?php if (isset($row)) echo $row["id"] ?>">
                 
-                    <label for="pur-date">Date:</label>
-                    <input type="date" name="pur-date" id="pur-date"  value="<?php if (isset($row)) echo $row["date"] ?>">
+                    <label for="date">Date:</label>
+                    <input type="date" name="date" id="date"  value="<?php if (isset($row)) echo $row["date"] ?>">
 
-                    <label for="pur-supplier">Supplier:</label>
-                    <select name="pur-supplier" id="pur-supplier">
+                    <label for="supplier">Supplier:</label>
+                    <select name="supplier" id="supplier">
                         <?php 
                             $SQL= "SELECT id,name,company FROM supplier";
 
@@ -76,12 +73,12 @@
                     </select>
                 
                     <table class="item-prod-list">
-                        <tr><th>Id</th><th>Name</th><th>Quantity</th><th>Purchased Price</th><th>Profit (%)</th><th>Custom Price</th><th>Total</th></tr>
+                        <tr><th>Id</th><th>Name</th><th>Quantity</th><th>Custom Price</th><th></th></tr>
 
                     <?php 
 
                     if ($editing) {
-                        $SQL= "SELECT product.id,product.name,purchase_line.quantity,purchase_line.buy_price,purchase_line.profit,purchase_line.custom_price FROM purchase_line INNER JOIN product ON purchase_line.id_product = product.id WHERE purchase_line.id_purchase = ?";
+                        $SQL= "SELECT product.id,product.name,document_line.quantity,document_line.custom_price FROM document_line INNER JOIN product ON document_line.id_product = product.id WHERE document_line.id_doc = ?";
 
                         $stmt = $mysqli->prepare($SQL);
                         $stmt->bind_param("i",$_GET["id"]);
@@ -90,13 +87,12 @@
 
                         if ($res->num_rows > 0) {
                             while($row3 = $res->fetch_assoc()) {
-                                $total = $row3["buy_price"] * $row3["quantity"];
-                                echo "<tr><td><input type='number' name='pur-prodid[]' value='".$row3["id"]."' /></td>
+                                $total = $row3["custom_price"] * $row3["quantity"];
+                                echo "<tr>
+                                <td><input type='number' name='prodid[]' value='".$row3["id"]."' /></td>
                                 <td>".$row3["name"]."</td>
-                                <td><input type='number' name='pur-quantity[]' value='".$row3["quantity"]."' /></td>
-                                <td><input type='number' step='.01' min='0' name='pur-buyprice[]' value='".$row3["buy_price"]."' /></td>
-                                <td><input type='number' step='.01' min='0' name='pur-profit[]' value='".$row3["profit"]."' /></td>
-                                <td><input type='number' step='.01' min='0' name='pur-cprice[]' value='".$row3["custom_price"]."' /></td>
+                                <td><input type='number' name='quantity[]' value='".$row3["quantity"]."' /></td>
+                                <td><input type='number' step='.01' min='0' name='cprice[]' value='".$row3["custom_price"]."' /></td>
                                 <td>".$total."</td>
                                 </tr>";
                             }
@@ -116,12 +112,10 @@
                         if ($res->num_rows > 0) {
                             $index = 0;
                             while($row3 = $res->fetch_assoc()) {
-                                echo "<tr><td><input type='number' name='pur-prodid[]' value='".$row3["id"]."' /></td>
+                                echo "<tr><td><input type='number' name='prodid[]' value='".$row3["id"]."' /></td>
                                 <td>".$row3["name"]."</td>
-                                <td><input type='number' step='.01' min='0' name='pur-quantity[]' value='". $quantitys[$index] . "' /></td>
-                                <td><input type='number' step='.01' min='0' name='pur-buyprice[]' /></td>
-                                <td><input type='number' step='.01' min='0' name='pur-profit[]' /></td>
-                                <td><input type='number' step='.01' min='0' name='pur-cprice[]' /></td>
+                                <td><input type='number' step='.01' min='0' name='quantity[]' value='". $quantitys[$index] . "' /></td>
+                                <td><input type='number' step='.01' min='0' name='cprice[]' /></td>
                                 <td></td>
                                 </tr>";
                                 $index = $index + 1;

@@ -3,14 +3,14 @@
 require "../db.php";
 require "../security.php";
 
-$id = $_POST["pur-id"];
+$id = $_POST["id"];
 
-$SQL= "DELETE FROM purchase_line WHERE id_purchase = ?";
+$SQL= "DELETE FROM document_line WHERE id_doc = ?";
 $res = $mysqli->prepare($SQL);
 $res->bind_param("i",$id);
 $res->execute();
 
-$SQL= "DELETE FROM purchase WHERE id = ?";
+$SQL= "DELETE FROM document WHERE id = ?";
 $res = $mysqli->prepare($SQL);
 $res->bind_param("i",$id);
 $res->execute();
